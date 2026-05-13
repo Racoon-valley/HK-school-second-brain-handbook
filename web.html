@@ -1,5 +1,34 @@
-import { useState, useRef, useEffect } from "react";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from "recharts";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F4F1EC">
+<title>Second Brain Tracker</title>
+<meta name="description" content="Track your learning task by task. Build your second brain with data visualization and progress tracking.">
+<meta property="og:title" content="Second Brain Tracker">
+<meta property="og:description" content="Task-by-task learning tracker with data visualization and progress tracking.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.6.0/dist/tabler-icons.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body, #root { min-height: 100vh; }
+  body { background: #F4F1EC; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.12.7/Recharts.min.js"></script>
+<script type="text/babel" data-type="module">
+const { useState, useRef, useEffect } = React;
+const { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } = Recharts;
 
 const C = {
   bg: "#F4F1EC", srf: "#FFFDF9", card: "#1A1917", cardA: "#252420",
@@ -124,7 +153,7 @@ function TaskForm({ task, topics, onSave, onClose, onDelete }) {
   );
 }
 
-export default function App() {
+function App() {
   const [view, setView] = useState("dashboard");
   const [tasks, setTasks] = useState(INIT);
   const [modal, setModal] = useState(null);
@@ -196,7 +225,7 @@ export default function App() {
 
   return (
     <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: C.bg, color: C.tx, minHeight: "100vh", WebkitFontSmoothing: "antialiased" }}>
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+      
       <style>{`
         @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
         .main-grid{display:grid;grid-template-columns:200px 1fr}
@@ -475,3 +504,9 @@ export default function App() {
     </div>
   );
 }
+
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
