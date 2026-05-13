@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Second Brain Handbook — Build Your Learning System</title>
+<meta name="description" content="A handbook for building your second brain with existing tools. Task-by-task learning tracking using Obsidian, Claude Code, and more.">
+<meta property="og:title" content="Second Brain Handbook">
+<meta property="og:description" content="Making the process of tracking someone's learning into a task-based game.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FAF6F0;--white:#FFFCF7;--stone:#3D3833;--stone-l:#6B6460;--stone-m:#9B958E;--coral:#D85A30;--teal:#1D9E75;--blue:#2E75B6;--purple:#7F77DD;--amber:#BA7517;--pink:#D4537E;--green:#639922;--brd:rgba(61,56,51,.1);--brd2:rgba(61,56,51,.25);--sh-s:0 1px 3px rgba(61,56,51,.08);--sh-m:0 4px 16px rgba(61,56,51,.08);--sh-l:0 8px 32px rgba(61,56,51,.12);--r:12px;--rl:20px}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--stone);line-height:1.7;font-size:16px;-webkit-font-smoothing:antialiased}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(250,246,240,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--brd);padding:0 24px}
+.nav-in{max-width:1060px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:54px}
+.nav-logo{font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:var(--stone);text-decoration:none}
+.nav-links{display:flex;gap:4px}
+.nav-links a{font-size:13px;font-weight:600;color:var(--stone-m);text-decoration:none;padding:6px 14px;border-radius:8px;transition:all .2s}
+.nav-links a:hover,.nav-links a.active{background:rgba(61,56,51,.07);color:var(--stone)}
+
+/* LAYOUT */
+.wrap{max-width:1060px;margin:0 auto;padding:64px 24px}
+.label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--coral);margin-bottom:6px}
+h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3.5vw,2.3rem);font-weight:700;margin-bottom:8px}
+h2 em{font-style:italic}
+.intro{font-size:16px;color:var(--stone-l);max-width:640px;margin-bottom:32px}
+.divider{max-width:1060px;margin:0 auto;border:none;border-top:1px solid var(--brd)}
+
+/* HERO */
+.hero{max-width:1060px;margin:0 auto;padding:72px 24px 56px;display:grid;grid-template-columns:1fr 360px;gap:48px;align-items:center}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4.5vw,3.2rem);line-height:1.12;font-weight:700;margin-bottom:16px}
+.hero h1 em{color:var(--coral);font-style:italic}
+.hero-sub{font-size:17px;color:var(--stone-l);max-width:480px;margin-bottom:28px}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--stone);color:var(--cream);padding:14px 32px;border-radius:100px;font-weight:600;font-size:15px;text-decoration:none;transition:transform .2s,box-shadow .2s;border:none;cursor:pointer;font-family:inherit}
+.hero-cta:hover{transform:translateY(-2px);box-shadow:var(--sh-l)}
+.hero-vis{background:linear-gradient(145deg,#E8DDD4,#CDBFB2);border-radius:24px;aspect-ratio:1;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:36px;align-content:center}
+.gem{width:100%;aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:22px;box-shadow:0 4px 14px rgba(61,56,51,.15);animation:fl 2.8s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+/* PERSONA */
+.persona{background:var(--white);border:1px solid var(--brd);border-radius:16px;padding:32px;display:flex;gap:24px;align-items:flex-start;max-width:1060px;margin:0 auto 48px;margin-left:auto;margin-right:auto}
+.persona-av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,#E8DDD4,#C8BBB0);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.persona-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;margin-bottom:4px}
+.persona p{color:var(--stone-l);font-size:15px}
+
+/* CODE STRIP */
+.code-strip{display:grid;grid-template-columns:repeat(4,1fr);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh-m);margin-bottom:24px}
+.code-s{padding:36px 20px;text-align:center;color:#fff}
+.code-l{font-family:'Playfair Display',serif;font-size:48px;font-weight:700;line-height:1}
+.code-w{font-weight:700;font-size:15px;margin-top:4px}
+.code-d{font-size:13px;opacity:.8;margin-top:2px}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--brd);border-radius:14px;padding:24px;position:relative;transition:transform .2s,box-shadow .2s;overflow:hidden}
+.card:hover{transform:translateY(-4px);box-shadow:var(--sh-m)}
+.card-top{position:absolute;top:0;left:0;right:0;height:3px}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.card-num{width:40px;height:40px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0}
+.card h3{font-family:'Playfair Display',serif;font-size:17px;font-weight:600}
+.card p{font-size:14px;color:var(--stone-l);line-height:1.65}
+.card-expand{margin-left:auto;font-size:20px;opacity:.4;cursor:pointer;transition:transform .2s;background:none;border:none;color:var(--stone);font-family:inherit}
+.card-detail{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.card-detail.open{max-height:120px}
+.card-detail-in{padding-top:12px;margin-top:12px;border-top:1px solid var(--brd);font-size:13px;font-weight:600}
+
+/* GRID LAYOUTS */
+.g7{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.g1{display:grid;gap:14px}
+
+/* SELF-TALK */
+.selftalk{background:var(--white);border:2px solid var(--amber);border-radius:var(--rl);padding:32px;margin-top:32px}
+.selftalk h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--amber);margin-bottom:18px}
+.selftalk-q{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:var(--stone-l);padding-left:20px;border-left:3px solid var(--amber);margin-bottom:14px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--brd);box-shadow:var(--sh-s);margin:24px 0}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;background:var(--white);min-width:700px}
+.tbl th{background:var(--stone);color:var(--cream);padding:13px 16px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.5px}
+.tbl td{padding:14px 16px;border-bottom:1px solid var(--brd);vertical-align:top}
+.tbl tr:nth-child(even) td{background:rgba(61,56,51,.02)}
+.stage-l{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--coral)}
+
+/* TOOL CARDS */
+.tool-head{padding:20px 20px 0;display:flex;align-items:center;gap:12px}
+.tool-icon{width:42px;height:42px;border-radius:10px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px}
+.tool-role{font-size:12px;color:var(--stone-m);font-weight:500}
+.tool-body{padding:12px 20px 20px}
+.tool-body p{font-size:14px;color:var(--stone-l);margin-bottom:10px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;background:rgba(61,56,51,.06);color:var(--stone-l)}
+
+/* SCENARIO */
+.sc{display:grid;grid-template-columns:52px 1fr;gap:20px}
+.sc-num{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--coral),var(--amber));color:#fff;font-family:'Playfair Display',serif;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.sc-stage{font-size:13px;color:var(--teal);font-weight:600;margin-top:8px}
+.sc-dopa{font-size:13px;color:var(--coral);font-weight:500;margin-top:2px}
+
+/* WIRE */
+.wire h3{font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.wire ul{padding-left:18px;font-size:14px;color:var(--stone-l)}
+.wire li{margin-bottom:5px}
+
+/* CALLOUT */
+.co{border-radius:10px;padding:18px 22px;font-size:14px;margin-top:24px}
+.co-tip{background:#EAF3DE;border-left:4px solid var(--teal);color:#27500A}
+.co-warn{background:#FAEEDA;border-left:4px solid var(--amber);color:#633806}
+.co-key{background:#EEEDFE;border-left:4px solid var(--purple);color:#3C3489}
+.co strong{font-weight:700}
+
+/* RESEARCH */
+.rq{background:linear-gradient(135deg,#3D3833,#5a524c);border-radius:var(--rl);padding:40px 36px;color:var(--cream)}
+.rq h3{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:20px}
+.rq-i{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;padding:14px 0;border-bottom:1px solid rgba(250,246,240,.15);line-height:1.6}
+.rq-i:last-child{border-bottom:none}
+
+/* NEXT */
+.ns{background:var(--white);border:1px solid var(--brd);border-radius:14px;padding:28px;text-align:center;transition:transform .2s,box-shadow .2s}
+.ns:hover{transform:translateY(-3px);box-shadow:var(--sh-m)}
+.ns-icon{width:52px;height:52px;border-radius:50%;color:#fff;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.ns h3{font-size:15px;font-weight:700;margin-bottom:6px}
+.ns p{font-size:14px;color:var(--stone-l)}
+
+/* CLOSING */
+.closing{text-align:center;margin-top:48px;padding:32px 24px;background:#EEEDFE;border-radius:16px}
+.closing p{font-family:'Playfair Display',serif;font-size:20px;font-style:italic;color:#3C3489;max-width:560px;margin:0 auto}
+
+/* FOOTER */
+footer{max-width:1060px;margin:0 auto;padding:32px 24px;text-align:center;border-top:1px solid var(--brd);font-size:14px;color:var(--stone-m)}
+footer em{font-family:'Playfair Display',serif}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero{grid-template-columns:1fr;padding:40px 20px 32px}
+  .hero-vis{max-width:260px;margin:0 auto}
+  .code-strip{grid-template-columns:repeat(2,1fr)}
+  .g2,.g3{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .persona{flex-direction:column;align-items:center;text-align:center;margin-left:24px;margin-right:24px}
+  .sc{grid-template-columns:1fr}
+  .g7{grid-template-columns:1fr}
+  .ns-grid-3{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="topnav">
+  <div class="nav-in">
+    <a href="#" class="nav-logo">Second Brain Handbook</a>
+    <div class="nav-links">
+      <a href="#code">C.O.D.E.</a>
+      <a href="#cycle">7 Steps</a>
+      <a href="#active">A.C.T.I.V.E.</a>
+      <a href="#tools">Tools</a>
+      <a href="#scenarios">Scenarios</a>
+      <a href="#wiring">Setup</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="hero">
+  <div>
+    <p class="label">April 2026 · IMT600</p>
+    <h1>Making learning a<br><em>task-based game</em></h1>
+    <p class="hero-sub">Where you collect, create, and polish raw materials along the way. A handbook for building your second brain with existing tools.</p>
+    <a href="#code" class="hero-cta">Start reading ↓</a>
+  </div>
+  <div class="hero-vis">
+    <div class="gem" style="background:var(--coral);animation-delay:0s">C</div>
+    <div class="gem" style="background:var(--teal);animation-delay:.15s">O</div>
+    <div class="gem" style="background:var(--blue);animation-delay:.3s">D</div>
+    <div class="gem" style="background:var(--purple);animation-delay:.1s">E</div>
+    <div class="gem" style="background:var(--amber);animation-delay:.25s">+</div>
+    <div class="gem" style="background:var(--pink);animation-delay:.4s">A</div>
+    <div class="gem" style="background:var(--green);animation-delay:.05s">I</div>
+    <div class="gem" style="background:var(--stone);animation-delay:.2s">=</div>
+    <div class="gem" style="background:var(--coral);opacity:.45;animation-delay:.35s">✦</div>
+  </div>
+</header>
+
+<!-- PERSONA -->
+<div style="padding:0 24px">
+  <div class="persona rv">
+    <div class="persona-av">📖</div>
+    <div>
+      <div class="persona-name">Meet Kelly</div>
+      <p>Kelly, now an adult, feels like she is starting to forget much of the knowledge she worked hard to learn. She needs a system — not just for storing notes, but for actively tracking what she learns task by task, connecting ideas, and turning scattered knowledge into something she can build with.</p>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- C.O.D.E. -->
+<section class="wrap" id="code">
+  <div class="rv">
+    <p class="label">Foundation</p>
+    <h2>The C.O.D.E. framework</h2>
+    <p class="intro">Four moves that make knowledge stick. Every piece of information flows through these stages — from raw material to polished gem.</p>
+  </div>
+  <div class="code-strip rv">
+    <div class="code-s" style="background:var(--coral)"><div class="code-l">C</div><div class="code-w">Capture</div><div class="code-d">Keep what resonates</div></div>
+    <div class="code-s" style="background:var(--teal)"><div class="code-l">O</div><div class="code-w">Organize</div><div class="code-d">Save for actionability</div></div>
+    <div class="code-s" style="background:var(--blue)"><div class="code-l">D</div><div class="code-w">Distill</div><div class="code-d">Find the essence</div></div>
+    <div class="code-s" style="background:var(--purple)"><div class="code-l">E</div><div class="code-w">Express</div><div class="code-d">Show your work</div></div>
+  </div>
+  <div class="co co-key rv"><strong>Key insight:</strong> Innovation often combines multiple knowledges — arts, literature, history, design, science, business, psychology. Your second brain is where cross-pollinations happen, because you can see connections your biological brain would have forgotten.</div>
+</section>
+
+<hr class="divider">
+
+<!-- 7-STEP CYCLE -->
+<section class="wrap" id="cycle">
+  <div class="rv">
+    <p class="label">The engine</p>
+    <h2>The 7-step <em style="color:var(--teal)">self-talk</em> learning cycle</h2>
+    <p class="intro">Each learning task flows through seven stages. Click any card to see its dopamine trigger. The cycle keeps you active and produces small reusable components at every step.</p>
+  </div>
+  <div class="g7" id="cycle-grid"></div>
+
+  <div class="selftalk rv">
+    <h3>Three layers of self-talk (before every task)</h3>
+    <div class="selftalk-q">First, what is my goal of building this?</div>
+    <div class="selftalk-q">Second, why is building this component important to me?</div>
+    <div class="selftalk-q">Third, how to build this work? What tools and resources can help?</div>
+  </div>
+  <div class="co co-tip rv"><strong>Small components are the secret.</strong> Learners need to build small components by themselves to prove their ideas and reinforce learning. These can be reused in future projects.</div>
+</section>
+
+<hr class="divider">
+
+<!-- A.C.T.I.V.E. -->
+<section class="wrap" id="active">
+  <div class="rv">
+    <p class="label">AI integration</p>
+    <h2>The A.C.T.I.V.E. <em style="color:var(--blue)">learning cycle</em></h2>
+    <p class="intro">Use AI without losing your edge. Each stage keeps the learner active and limits passive overreliance.</p>
+  </div>
+  <div class="tbl-wrap rv">
+    <table class="tbl">
+      <thead><tr><th style="width:50px">Stage</th><th style="width:140px">Learner Action</th><th>How to Use AI</th><th>Safeguard</th><th style="width:130px">Output</th></tr></thead>
+      <tbody>
+        <tr><td><span class="stage-l">A</span></td><td><strong>Achieve — set your goal</strong></td><td>Describe the skill, explain why it matters, how you'll know success. Try a short practice without AI.</td><td style="font-style:italic">Do not open AI until a goal and first attempt exist.</td><td>Goal card + baseline map</td></tr>
+        <tr><td><span class="stage-l">C</span></td><td><strong>Choose tools & rules</strong></td><td>Pick 1–2 tools. Evaluate accuracy, transparency, privacy, ease, cost, and fit.</td><td style="font-style:italic">Write what the tool may and may NOT do.</td><td>Tool stack + use policy</td></tr>
+        <tr><td><span class="stage-l">T</span></td><td><strong>Try first</strong></td><td>Spend 5–20 min solving, outlining, coding, or sketching before using AI.</td><td style="font-style:italic">Record your own reasoning path first.</td><td>Attempt v1</td></tr>
+        <tr><td><span class="stage-l">I</span></td><td><strong>Interrogate the AI</strong></td><td>Request one hint at a time. Ask for examples, comparisons, edge cases, mistakes.</td><td style="font-style:italic">Prefer "coach mode." Ask "why this?"</td><td>Improved mental model</td></tr>
+        <tr><td><span class="stage-l">V</span></td><td><strong>Verify & compare</strong></td><td>Cross-check AI output against other sources and your own reasoning.</td><td style="font-style:italic">Never use same tool as generator AND verifier.</td><td>Verified notes + transfer task</td></tr>
+        <tr><td><span class="stage-l">E</span></td><td><strong>Express your ideas</strong></td><td>Put concepts in your own words, teach someone, build without AI.</td><td style="font-style:italic">Final work must be reconstructable without the tool.</td><td>Personal artifact</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="co co-warn rv"><strong>The passivity trap:</strong> If AI does the thinking for you, your brain won't form connections for long-term retention. Every safeguard keeps your mind engaged. AI as coach, not replacement.</div>
+</section>
+
+<hr class="divider">
+
+<!-- TOOLS -->
+<section class="wrap" id="tools">
+  <div class="rv">
+    <p class="label">Your toolkit</p>
+    <h2>Tools you can <em style="color:var(--teal)">wire together</em></h2>
+    <p class="intro">Don't build from scratch. These tools cover every layer of your second brain.</p>
+  </div>
+  <div class="g3" id="tools-grid"></div>
+</section>
+
+<hr class="divider">
+
+<!-- SCENARIOS -->
+<section class="wrap" id="scenarios">
+  <div class="rv">
+    <p class="label">In practice</p>
+    <h2>Five scenarios — <em style="color:var(--purple)">how it works</em></h2>
+    <p class="intro">Your second brain supports different workflows depending on what you're doing.</p>
+  </div>
+  <div class="g1" id="scenario-grid"></div>
+</section>
+
+<hr class="divider">
+
+<!-- WIRING -->
+<section class="wrap" id="wiring">
+  <div class="rv">
+    <p class="label">Assembly</p>
+    <h2>Wiring it together — <em style="color:var(--blue)">Obsidian + Claude Code</em></h2>
+    <p class="intro">Connect existing tools. Here's how the pieces fit.</p>
+  </div>
+  <div class="g2" id="wire-grid"></div>
+  <div class="co co-tip rv"><strong>Start with manual capture.</strong> Finish a task → open today's log → fill in one entry. 30 seconds. Only add automation after this habit is solid (2+ weeks).</div>
+</section>
+
+<hr class="divider">
+
+<!-- RESEARCH -->
+<section class="wrap">
+  <div class="rq rv">
+    <h3>Main research questions</h3>
+    <div class="rq-i">How transparent do learners treat themselves when using AI for learning?</div>
+    <div class="rq-i">What forms of transparency and user choice support intentional generative AI use while strengthening critical thinking, independent judgment, and long-term skill development?</div>
+    <div class="rq-i">What does the goal of a learner or builder want to achieve — and how does that shape their relationship with AI tools?</div>
+  </div>
+
+  <div class="g3 rv" style="margin-top:40px;grid-template-columns:repeat(3,1fr)">
+    <div class="ns"><div class="ns-icon" style="background:var(--coral)">1</div><h3>Record your process</h3><p>Document building step by step. Gather info, find flaws.</p></div>
+    <div class="ns"><div class="ns-icon" style="background:var(--teal)">2</div><h3>Wire existing tools</h3><p>Connect Obsidian + Claude Code. Don't build from scratch.</p></div>
+    <div class="ns"><div class="ns-icon" style="background:var(--purple)">3</div><h3>Share & learn</h3><p>Share with other learners. Feedback shapes the next version.</p></div>
+  </div>
+
+  <div class="closing rv">
+    <p>It's normal to forget some details. What matters is that you keep focusing on what's important for your goal. Stay on top of your track — and use keywords to understand your learning map.</p>
+  </div>
+</section>
+
+<footer>
+  <p><em>Second Brain Handbook</em> — IMT600 Independent Study, April 2026</p>
+</footer>
+
+<script>
+// DATA
+const STEPS = [
+  {n:1,title:"Set Learning Intention",desc:"Define the goal, a question, a skill, or a decision you are trying to change. Before you open any tool, ask yourself three self-talk questions.",color:"#2E75B6",dopa:"Self-talk: Three layers of intention-setting"},
+  {n:2,title:"Capture All Possible Inputs",desc:"Notes, talkings, lectures, papers, books, webpages, conversations, podcasts — cast a wide net across every possible material.",color:"#1D9E75",dopa:"⚠ Limitation: searching tools have blind spots"},
+  {n:3,title:"Selection",desc:"Organize by finding repetitive patterns and edge cases. Decide how to group information. Make future retrieval easy.",color:"#7F77DD",dopa:"⚠ Bias and information loss from distillation"},
+  {n:4,title:"Mental Models",desc:"Drawing time! Review all info to spot conflicting ideas, notice subtle differences, and map the context behind those ideas.",color:"#BA7517",dopa:"+Dopamine — revising info easily"},
+  {n:5,title:"Build Small Artifacts",desc:"Recall, explain, simulate, solve problems. Build small works to prove your concepts — reusable gems of knowledge.",color:"#D85A30",dopa:"+Dopamine — brainstorming small tasks to try"},
+  {n:6,title:"Express Artifacts",desc:"Ship your knowledge. Make this small component useful to another human. Share all types of artifacts with the world.",color:"#D4537E",dopa:"⚠ Limitations: approachable tools and personal tastes"},
+  {n:7,title:"Reflection & Feedback",desc:"What is useful? What is missing? What should be pruned or learned next? This feeds back into Step 1.",color:"#3D3833",dopa:"+Dopamine — showing the growth"}
+];
+
+const TOOLS = [
+  {name:"Obsidian",role:"Knowledge base + daily logs",desc:"Local-first markdown with backlinks, graph view, and 1000+ plugins.",color:"#7F77DD",tags:["Capture","Organize","Review"]},
+  {name:"Claude / Claude Code",role:"AI coach + builder",desc:"Interrogation partner and artifact builder. Connect to Obsidian via MCP.",color:"#D85A30",tags:["Connect","Build"]},
+  {name:"Todoist / TickTick",role:"Task management",desc:"Track learning tasks, schedule reviews, create recurring habits.",color:"#1D9E75",tags:["Act","Review"]},
+  {name:"Readwise",role:"Highlight sync + review",desc:"Auto-syncs highlights from Kindle, articles, podcasts into your vault.",color:"#BA7517",tags:["Capture","Connect"]},
+  {name:"Anki",role:"Spaced repetition",desc:"Flashcards with scientifically-proven spaced repetition algorithms.",color:"#D4537E",tags:["Review"]},
+  {name:"Zapier / Make",role:"Automation glue",desc:'Connects apps without code. "Completed task → new Obsidian entry."',color:"#2E75B6",tags:["Connect"]}
+];
+
+const SCENARIOS = [
+  {n:1,title:"Knowledge dashboard",desc:"See all information groups as bubbles. Click any topic to browse by date or tag — your bird's-eye view of everything you know.",stage:"Capture → Selection",dopa:"Revising info easily"},
+  {n:2,title:"Brainstorm combinator",desc:"Select pieces from different info groups and combine them. Cross-pollination across disciplines to form original ideas.",stage:"Build Small Artifacts",dopa:"Brainstorming small tasks to try"},
+  {n:3,title:"News feed by field",desc:"Curated news for any topic. Listen to AI summaries and decide: add to notes? Yes / No. Stay current without drowning.",stage:"Capture All Inputs",dopa:"Listening and deciding what to retain"},
+  {n:4,title:"Discussion & meeting notes",desc:"Capture stories from meetings. Search by keywords, prioritize stories, connect into a stakeholder map.",stage:"Express Artifacts",dopa:"Reading meeting notes like a show"},
+  {n:5,title:"Learning growth map",desc:"See how your understanding evolved: concepts → new concepts, ideas → new ideas, thoughts → new thoughts.",stage:"Reflection & Feedback",dopa:"Showing the growth visually"}
+];
+
+const WIRES = [
+  {icon:"📁",title:"Vault structure",items:["00 Inbox — quick captures","01 Daily Logs — one per day","02 Topic Hubs — one per subject","03 Weekly Reviews — review ritual","04 Artifacts — small works","05 Resources — saved references"]},
+  {icon:"🔌",title:"Essential plugins",items:["Templater — instant templates","Dataview — query like a database","Spaced Repetition — flashcards","Calendar — visual navigation","Canvas — visual brainstorming"]},
+  {icon:"🤖",title:"Claude Code via MCP",items:["Reads vault files directly","Summarizes topic hubs","Generates flashcards from notes","Builds automations","Acts as interrogation partner"]},
+  {icon:"📝",title:"Daily capture fields",items:["Task name — what you worked on","Topic tag — skill area","Learned — in your own words","Still fuzzy — knowledge gaps","Confidence — low/medium/high","Backlinks — related past tasks"]}
+];
+
+// RENDER
+function renderCycleCards(){
+  const grid=document.getElementById('cycle-grid');
+  STEPS.forEach(s=>{
+    const d=document.createElement('div');
+    d.className='card rv';
+    d.innerHTML=`<div class="card-top" style="background:${s.color}"></div>
+      <div class="card-head">
+        <div class="card-num" style="background:${s.color}">${s.n}</div>
+        <h3>${s.title}</h3>
+        <button class="card-expand" aria-label="Expand">+</button>
+      </div>
+      <p>${s.desc}</p>
+      <div class="card-detail"><div class="card-detail-in" style="color:${s.dopa.startsWith('+')?s.color:'#BA7517'}">${s.dopa}</div></div>`;
+    d.addEventListener('click',()=>{
+      const det=d.querySelector('.card-detail');
+      const btn=d.querySelector('.card-expand');
+      det.classList.toggle('open');
+      btn.style.transform=det.classList.contains('open')?'rotate(45deg)':'rotate(0)';
+    });
+    grid.appendChild(d);
+  });
+}
+
+function renderTools(){
+  const grid=document.getElementById('tools-grid');
+  TOOLS.forEach(t=>{
+    const d=document.createElement('div');
+    d.className='card rv';
+    d.style.padding='0';
+    d.innerHTML=`<div class="tool-head">
+        <div class="tool-icon" style="background:${t.color}">${t.name[0]}</div>
+        <div><div style="font-weight:700;font-size:15px">${t.name}</div><div class="tool-role">${t.role}</div></div>
+      </div>
+      <div class="tool-body"><p>${t.desc}</p>
+        <div class="tags">${t.tags.map(g=>`<span class="tag">${g}</span>`).join('')}</div>
+      </div>`;
+    grid.appendChild(d);
+  });
+}
+
+function renderScenarios(){
+  const grid=document.getElementById('scenario-grid');
+  SCENARIOS.forEach(s=>{
+    const d=document.createElement('div');
+    d.className='card sc rv';
+    d.innerHTML=`<div class="sc-num">${s.n}</div>
+      <div>
+        <h3>${s.title}</h3>
+        <p>${s.desc}</p>
+        <div class="sc-stage">Stage: ${s.stage}</div>
+        <div class="sc-dopa">+Dopamine — ${s.dopa}</div>
+      </div>`;
+    grid.appendChild(d);
+  });
+}
+
+function renderWires(){
+  const grid=document.getElementById('wire-grid');
+  WIRES.forEach(w=>{
+    const d=document.createElement('div');
+    d.className='card wire rv';
+    d.innerHTML=`<h3>${w.icon} ${w.title}</h3>
+      <ul>${w.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+    grid.appendChild(d);
+  });
+}
+
+// SCROLL REVEAL
+function initReveal(){
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});
+  },{threshold:.1});
+  document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+}
+
+// SCROLL SPY
+function initScrollSpy(){
+  const links=document.querySelectorAll('.nav-links a');
+  const ids=['code','cycle','active','tools','scenarios','wiring'];
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        links.forEach(l=>l.classList.remove('active'));
+        const match=[...links].find(l=>l.getAttribute('href')==='#'+e.target.id);
+        if(match)match.classList.add('active');
+      }
+    });
+  },{rootMargin:'-30% 0px -60% 0px'});
+  ids.forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el);});
+}
+
+// INIT
+document.addEventListener('DOMContentLoaded',()=>{
+  renderCycleCards();
+  renderTools();
+  renderScenarios();
+  renderWires();
+  setTimeout(initReveal,100);
+  initScrollSpy();
+});
+</script>
+</body>
+</html>
